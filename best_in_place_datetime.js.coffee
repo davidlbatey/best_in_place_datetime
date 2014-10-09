@@ -6,6 +6,16 @@ datetime =
   "datetime" :
     activateForm: ->
       that      = this
+
+      _defaults =
+          dateFormat: "yy-mm-dd"
+          timeFormat: "HH:mm:ss"
+          parse: 'loose'
+          onClose: ->
+            that.update()
+      overrideOptions = jQuery(this.element[0]).data('datetimepicker-options')
+      options = $.extend {}, _defaults, overrideOptions
+
       output    = jQuery(document.createElement('form'))
                   .addClass('form_in_place')
                   .attr('action', 'javascript:void(0);')
@@ -27,13 +37,7 @@ datetime =
       this.element.find("input").bind('keyup', {editor: this}, BestInPlaceEditor.forms.input.keyupHandler)
 
       this.element.find('input')
-        .datetimepicker
-          dateFormat: "yy-mm-dd"
-          timeFormat: "HH:mm:ss"
-          parse: 'loose'
-          onClose: ->
-            that.update()
-
+        .datetimepicker(options)
         .datepicker('show')
     ,
 

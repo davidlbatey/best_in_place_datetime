@@ -4,8 +4,18 @@
   datetime = {
     "datetime": {
       activateForm: function() {
-        var input_elt, output, that;
+        var input_elt, options, output, overrideOptions, that, _defaults;
         that = this;
+        _defaults = {
+          dateFormat: "yy-mm-dd",
+          timeFormat: "HH:mm:ss",
+          parse: 'loose',
+          onClose: function() {
+            return that.update();
+          }
+        };
+        overrideOptions = $(this.element[0]).data('datetimepicker-options');
+        options = $.extend({}, _defaults, overrideOptions);
         output = jQuery(document.createElement('form')).addClass('form_in_place').attr('action', 'javascript:void(0);').attr('style', 'display:inline');
         input_elt = jQuery(document.createElement('input')).attr('type', 'text').attr('name', this.attributeName).attr('value', this.sanitizeValue(this.display_value));
         if (this.inner_class !== null) {
@@ -21,14 +31,7 @@
         this.element.find("input").bind('keyup', {
           editor: this
         }, BestInPlaceEditor.forms.input.keyupHandler);
-        return this.element.find('input').datetimepicker({
-          dateFormat: "yy-mm-dd",
-          timeFormat: "HH:mm:ss",
-          parse: 'loose',
-          onClose: function() {
-            return that.update();
-          }
-        }).datepicker('show');
+        return this.element.find('input').datetimepicker(options).datepicker('show');
       },
       getValue: function() {
         return this.sanitizeValue(this.element.find("input").val());
